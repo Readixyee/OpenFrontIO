@@ -30,6 +30,8 @@ export enum GamePhase {
 export class GameServer {
   private outOfSyncClients = new Set<ClientID>();
 
+  private outOfSyncClients = new Set<ClientID>();
+
   private maxGameDuration = 3 * 60 * 60 * 1000; // 3 hours
 
   private turns: Turn[] = [];
