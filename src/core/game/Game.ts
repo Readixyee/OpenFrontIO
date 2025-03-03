@@ -200,6 +200,8 @@ export class PlayerInfo {
 }
 
 export interface Unit {
+  id(): number;
+
   // Properties
   type(): UnitType;
   troops(): number;
@@ -216,6 +218,9 @@ export interface Unit {
   hasHealth(): boolean;
   health(): number;
   modifyHealth(delta: number): void;
+  // State for warships (currently)
+  setTarget(target: Unit): void;
+  target(): Unit;
 
   // Mutations
   setTroops(troops: number): void;
