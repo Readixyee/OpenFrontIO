@@ -31,6 +31,7 @@ fi
 
 echo "Starting new container..."
 docker run -d -p 80:80 \
+  --restart=always \
   --log-driver=awslogs \
   --log-opt awslogs-region=eu-west-1 \
   --log-opt awslogs-group=/aws/ec2/docker-containers \
