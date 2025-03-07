@@ -252,7 +252,7 @@ export class UnitLayer implements Layer {
       const targetOwner = this.game
         .units()
         .find((u) => u.id() == unit.targetId())
-        .owner();
+        ?.owner();
       if (targetOwner == this.myPlayer) {
         outerColor = colord({ r: 200, b: 0, g: 0 });
       }
