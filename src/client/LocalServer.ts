@@ -7,6 +7,7 @@ import {
 import { consolex } from "../core/Consolex";
 import { GameEvent } from "../core/EventBus";
 import {
+  AllPlayersStats,
   ClientID,
   ClientMessage,
   ClientMessageSchema,
@@ -22,20 +23,19 @@ import {
 } from "../core/Schemas";
 import { CreateGameRecord, generateID } from "../core/Util";
 import { LobbyConfig } from "./ClientGameRunner";
-import { LocalPersistantStats } from "./LocalPersistantStats";
 import { getPersistentIDFromCookie } from "./Main";
 
 export class LocalServer {
   private turns: Turn[] = [];
   private intents: Intent[] = [];
   private startedAt: number;
-  private localPersistantsStats = new LocalPersistantStats();
 
   private endTurnIntervalID;
 
   private paused = false;
 
   private winner: ClientID | null = null;
+  private allPlayersStats: AllPlayersStats = {};
 
   constructor(
     private serverConfig: ServerConfig,
@@ -86,6 +86,7 @@ export class LocalServer {
     }
     if (clientMsg.type == "winner") {
       this.winner = clientMsg.winner;
+      this.allPlayersStats = clientMsg.allPlayersStats;
     }
   }
 
@@ -125,6 +126,7 @@ export class LocalServer {
       this.startedAt,
       Date.now(),
       this.winner,
+      this.allPlayersStats,
     );
     // Clear turns because beacon only supports up to 64kb
     record.turns = [];
