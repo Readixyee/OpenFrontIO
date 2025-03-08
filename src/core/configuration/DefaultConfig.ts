@@ -132,7 +132,7 @@ export class DefaultConfig implements Config {
     return 10000 + 100 * Math.pow(dist, 1.1);
   }
   tradeShipSpawnRate(): number {
-    return 500;
+    return 700;
   }
 
   unitInfo(type: UnitType): UnitInfo {
