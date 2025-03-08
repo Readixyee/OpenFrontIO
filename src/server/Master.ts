@@ -255,7 +255,7 @@ function getNextMap(): GameMapType {
     BlackSea: 2,
     Africa: 2,
     Asia: 2,
-    Mars: 0,
+    Mars: 2,
   };
 
   Object.keys(GameMapType).forEach((key) => {
