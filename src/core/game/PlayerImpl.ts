@@ -698,6 +698,9 @@ export class PlayerImpl implements Player {
         return this.transportShipSpawn(targetTile);
       case UnitType.TradeShip:
         return this.tradeShipSpawn(targetTile);
+      case UnitType.TradePlane:
+        return this.tradePlaneSpawn(targetTile);
+      case UnitType.Airport:
       case UnitType.MissileSilo:
       case UnitType.DefensePost:
       case UnitType.SAMLauncher:
@@ -776,6 +779,16 @@ export class PlayerImpl implements Player {
   }
   lastTileChange(): Tick {
     return this._lastTileChange;
+  }
+
+  tradePlaneSpawn(targetTile: TileRef): TileRef | false {
+    const spawns = this.units(UnitType.Airport).filter(
+      (u) => u.tile() == targetTile,
+    );
+    if (spawns.length == 0) {
+      return false;
+    }
+    return spawns[0].tile();
   }
 
   hash(): number {

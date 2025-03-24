@@ -155,6 +155,9 @@ export class DefaultConfig implements Config {
   tradeShipGold(dist: number): Gold {
     return 10000 + 150 * Math.pow(dist, 1.1);
   }
+  tradePlaneGold(dist: number): Gold {
+    return 10000 + 150 * Math.pow(dist, 1.1);
+  }
   tradeShipSpawnRate(numberOfPorts: number): number {
     if (numberOfPorts <= 3) return 180;
     if (numberOfPorts <= 5) return 250;
@@ -162,6 +165,14 @@ export class DefaultConfig implements Config {
     if (numberOfPorts <= 10) return 400;
     if (numberOfPorts <= 12) return 450;
     return 500;
+  }
+  tradePlaneSpawnRate(numberOfAirports: number): number {
+    if (numberOfAirports <= 3) return 350;
+    if (numberOfAirports <= 5) return 400;
+    if (numberOfAirports <= 8) return 450;
+    if (numberOfAirports <= 10) return 500;
+    if (numberOfAirports <= 12) return 550;
+    return 600;
   }
 
   unitInfo(type: UnitType): UnitInfo {
@@ -210,6 +221,21 @@ export class DefaultConfig implements Config {
           territoryBound: true,
           constructionDuration: this.instantBuild() ? 0 : 2 * 10,
         };
+      case UnitType.Airport:
+        return {
+          cost: (p: Player) =>
+            p.type() == PlayerType.Human && this.infiniteGold()
+              ? 0
+              : Math.min(
+                  1_000_000,
+                  Math.pow(
+                    2,
+                    p.unitsIncludingConstruction(UnitType.Airport).length,
+                  ) * 125_000,
+                ),
+          territoryBound: true,
+          constructionDuration: this.instantBuild() ? 0 : 2 * 10,
+        };
       case UnitType.AtomBomb:
         return {
           cost: (p: Player) =>
@@ -236,6 +262,11 @@ export class DefaultConfig implements Config {
           territoryBound: false,
         };
       case UnitType.TradeShip:
+        return {
+          cost: () => 0,
+          territoryBound: false,
+        };
+      case UnitType.TradePlane:
         return {
           cost: () => 0,
           territoryBound: false,

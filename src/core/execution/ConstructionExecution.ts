@@ -18,6 +18,7 @@ import { MissileSiloExecution } from "./MissileSiloExecution";
 import { NukeExecution } from "./NukeExecution";
 import { PortExecution } from "./PortExecution";
 import { WarshipExecution } from "./WarshipExecution";
+import { AirportExecution } from "./AirportExecution";
 
 export class ConstructionExecution implements Execution {
   private player: Player;
@@ -105,6 +106,9 @@ export class ConstructionExecution implements Execution {
         break;
       case UnitType.Port:
         this.mg.addExecution(new PortExecution(player.id(), this.tile));
+        break;
+      case UnitType.Airport:
+        this.mg.addExecution(new AirportExecution(player.id(), this.tile));
         break;
       case UnitType.MissileSilo:
         this.mg.addExecution(new MissileSiloExecution(player.id(), this.tile));

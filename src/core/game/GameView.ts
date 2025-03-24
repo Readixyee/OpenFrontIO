@@ -99,6 +99,12 @@ export class UnitView {
     }
     return this.data.dstPortId;
   }
+  dstAirportId(): number {
+    if (this.type() != UnitType.TradePlane) {
+      throw Error("Must be a trade plane");
+    }
+    return this.data.dstAirportId;
+  }
   detonationDst(): TileRef {
     if (!nukeTypes.includes(this.type())) {
       throw Error("Must be a nuke");

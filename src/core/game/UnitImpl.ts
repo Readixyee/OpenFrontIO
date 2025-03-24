@@ -20,6 +20,7 @@ export class UnitImpl implements Unit {
 
   private _isSamCooldown: boolean;
   private _dstPort: Unit | null = null; // Only for trade ships
+  private _dstAirport: Unit | null = null; // Only for trade ships
   private _detonationDst: TileRef | null = null; // Only for nukes
   private _warshipTarget: Unit | null = null;
 
@@ -35,6 +36,7 @@ export class UnitImpl implements Unit {
     this._health = toInt(this.mg.unitInfo(_type).maxHealth ?? 1);
     this._lastTile = _tile;
     this._dstPort = unitsSpecificInfos.dstPort;
+    this._dstAirport = unitsSpecificInfos.dstAirport;
     this._detonationDst = unitsSpecificInfos.detonationDst;
     this._warshipTarget = unitsSpecificInfos.warshipTarget;
   }
@@ -46,6 +48,7 @@ export class UnitImpl implements Unit {
   toUpdate(): UnitUpdate {
     const warshipTarget = this.warshipTarget();
     const dstPort = this.dstPort();
+    const dstAirport = this.dstAirport();
     return {
       type: GameUpdateType.Unit,
       unitType: this._type,
@@ -58,6 +61,7 @@ export class UnitImpl implements Unit {
       health: this.hasHealth() ? Number(this._health) : undefined,
       constructionType: this._constructionType,
       dstPortId: dstPort ? dstPort.id() : null,
+      dstAirportId: dstAirport ? dstAirport.id() : null,
       warshipTargetId: warshipTarget ? warshipTarget.id() : null,
       detonationDst: this.detonationDst(),
       isSamCooldown: this.isSamCooldown() ? this.isSamCooldown() : null,
@@ -184,6 +188,10 @@ export class UnitImpl implements Unit {
     return this._dstPort;
   }
 
+  dstAirport(): Unit {
+    return this._dstAirport;
+  }
+
   setSamCooldown(cooldown: boolean): void {
     this._isSamCooldown = cooldown;
     this.mg.addUpdate(this.toUpdate());
@@ -195,6 +203,10 @@ export class UnitImpl implements Unit {
 
   setDstPort(dstPort: Unit): void {
     this._dstPort = dstPort;
+  }
+
+  setDstAirport(dstAirport: Unit): void {
+    this._dstAirport = dstAirport;
   }
 
   setMoveTarget(moveTarget: TileRef) {

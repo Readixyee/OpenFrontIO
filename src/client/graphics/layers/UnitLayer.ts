@@ -222,6 +222,9 @@ export class UnitLayer implements Layer {
       case UnitType.TradeShip:
         this.handleTradeShipEvent(unit);
         break;
+      case UnitType.TradePlane:
+        this.handleTradePlaneEvent(unit);
+        break;
       case UnitType.MIRVWarhead:
         this.handleMIRVWarhead(unit);
         break;
@@ -468,6 +471,61 @@ export class UnitLayer implements Layer {
           this.game.y(t),
           rel,
           this.theme.borderColor(unit.owner().info()),
+          255,
+        );
+      }
+    }
+  }
+
+  private handleTradePlaneEvent(unit: UnitView) {
+    const rel = this.relationship(unit);
+
+    // Clear previous area
+    for (const t of this.game.bfs(
+      unit.lastTile(),
+      euclDistFN(unit.lastTile(), 5, false),
+    )) {
+      this.clearCell(this.game.x(t), this.game.y(t));
+    }
+
+    if (unit.isActive()) {
+      // Paint territory with a circular radius
+      for (const t of this.game.bfs(
+        unit.tile(),
+        euclDistFN(unit.tile(), 4, false),
+      )) {
+        this.paintCell(
+          this.game.x(t),
+          this.game.y(t),
+          rel,
+          this.theme.territoryColor(unit.owner().info()),
+          255,
+        );
+      }
+
+      // Paint border with a circular radius
+      for (const t of this.game.bfs(
+        unit.tile(),
+        euclDistFN(unit.tile(), 3, false),
+      )) {
+        this.paintCell(
+          this.game.x(t),
+          this.game.y(t),
+          rel,
+          this.theme.borderColor(unit.owner().info()),
+          255,
+        );
+      }
+
+      for (const t of this.game.bfs(
+        unit.tile(),
+        euclDistFN(unit.tile(), 1, false),
+      )) {
+        this.paintCell(
+          this.game.x(t),
+          this.game.y(t),
+          rel,
+          this.theme.tradeColor(),
           255,
         );
       }

@@ -240,6 +240,7 @@ export const pastelTheme = new (class implements Theme {
   private _enemyColor = colord({ r: 255, g: 0, b: 0 });
 
   private _spawnHighlightColor = colord({ r: 255, g: 213, b: 79 });
+  private _tradeColor = colord({ r: 79, g: 158, b: 255 });
 
   territoryColor(playerInfo: PlayerInfo): Colord {
     if (playerInfo.playerType == PlayerType.Human) {
@@ -345,5 +346,9 @@ export const pastelTheme = new (class implements Theme {
 
   spawnHighlightColor(): Colord {
     return this._spawnHighlightColor;
+  }
+
+  tradeColor(): Colord {
+    return this._tradeColor;
   }
 })();

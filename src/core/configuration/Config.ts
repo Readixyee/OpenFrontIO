@@ -96,7 +96,9 @@ export interface Config {
   defaultDonationAmount(sender: Player): number;
   unitInfo(type: UnitType): UnitInfo;
   tradeShipGold(dist: number): Gold;
+  tradePlaneGold(dist: number): Gold;
   tradeShipSpawnRate(numberOfPorts: number): number;
+  tradePlaneSpawnRate(numberOfPorts: number): number;
   defensePostRange(): number;
   defensePostDefenseBonus(): number;
   falloutDefenseModifier(percentOfFallout: number): number;
@@ -120,4 +122,5 @@ export interface Theme {
   allyColor(): Colord;
   enemyColor(): Colord;
   spawnHighlightColor(): Colord;
+  tradeColor(): Colord;
 }

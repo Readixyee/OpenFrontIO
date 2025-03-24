@@ -74,9 +74,11 @@ export enum UnitType {
   Shell = "Shell",
   SAMMissile = "SAMMissile",
   Port = "Port",
+  Airport = "Airport",
   AtomBomb = "Atom Bomb",
   HydrogenBomb = "Hydrogen Bomb",
   TradeShip = "Trade Ship",
+  TradePlane = "Trade Plane",
   MissileSilo = "Missile Silo",
   DefensePost = "Defense Post",
   SAMLauncher = "SAM Launcher",
@@ -207,6 +209,7 @@ export class PlayerInfo {
 
 // Some units have info specific to them
 export interface UnitSpecificInfos {
+  dstAirport?: Unit;
   dstPort?: Unit; // Only for trade ships
   detonationDst?: TileRef; // Only for nukes
   warshipTarget?: Unit;
@@ -239,6 +242,8 @@ export interface Unit {
   isSamCooldown(): boolean;
   setDstPort(dstPort: Unit): void;
   dstPort(): Unit; // Only for trade ships
+  setDstAirport(dstAirport: Unit): void;
+  dstAirport(): Unit; // Only for trade planes
   detonationDst(): TileRef; // Only for nukes
 
   setMoveTarget(cell: TileRef): void;

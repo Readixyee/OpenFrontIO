@@ -36,6 +36,11 @@ export class StructureLayer implements Layer {
       borderRadius: 8.525,
       territoryRadius: 6.525,
     },
+    [UnitType.Airport]: {
+      icon: anchorIcon,
+      borderRadius: 8.525,
+      territoryRadius: 6.525,
+    },
     [UnitType.City]: {
       icon: cityIcon,
       borderRadius: 8.525,

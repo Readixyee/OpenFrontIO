@@ -57,6 +57,11 @@ const buildTable: BuildItemDisplay[][] = [
       description: "Sends trade ships to allies to generate gold",
     },
     {
+      unitType: UnitType.Airport,
+      icon: portIcon,
+      description: "Sends trade planes to allies to generate gold",
+    },
+    {
       unitType: UnitType.MissileSilo,
       icon: missileSiloIcon,
       description: "Used to launch nukes",

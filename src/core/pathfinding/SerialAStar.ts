@@ -49,6 +49,7 @@ export class SerialAStar implements AStar {
 
     this.maxTries -= 1;
     let iterations = this.iterations;
+    console.log(this.iterations);
 
     while (!this.fwdOpenSet.isEmpty() && !this.bwdOpenSet.isEmpty()) {
       iterations--;

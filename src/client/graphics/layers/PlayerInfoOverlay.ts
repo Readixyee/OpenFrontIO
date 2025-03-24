@@ -220,6 +220,9 @@ export class PlayerInfoOverlay extends LitElement implements Layer {
           Ports: ${player.units(UnitType.Port).length}
         </div>
         <div class="text-sm opacity-80" translate="no">
+          Airports: ${player.units(UnitType.Airport).length}
+        </div>
+        <div class="text-sm opacity-80" translate="no">
           Cities: ${player.units(UnitType.City).length}
         </div>
         <div class="text-sm opacity-80" translate="no">
