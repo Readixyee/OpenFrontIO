@@ -62,7 +62,7 @@ export class SAMLauncherExecution implements Execution {
     }
 
     const nukes = this.mg
-      .units(UnitType.AtomBomb, UnitType.HydrogenBomb)
+      .units(UnitType.AtomBomb, UnitType.HydrogenBomb, UnitType.TradePlane)
       .filter((u) => {
         // (x - center_x)² + (y - center_y)² < radius²
         const x = this.mg.x(u.tile());
@@ -74,23 +74,29 @@ export class SAMLauncherExecution implements Execution {
         return isInRange;
       })
       .filter((u) => u.owner() !== this.player)
-      .filter((u) => !u.owner().isAlliedWith(this.player));
+      .filter((u) => !u.owner().isAlliedWith(this.player))
+      .filter(
+        (u) =>
+          u.type() !== UnitType.TradePlane ||
+          u.dstAirport()?.owner() !== this.player,
+      );
 
     this.target =
       nukes.sort((a, b) => {
-        // Prioritize HydrogenBombs first
-        if (
-          a.type() === UnitType.HydrogenBomb &&
-          b.type() !== UnitType.HydrogenBomb
-        ) {
-          return -1;
+        const getPriority = (unit: Unit) => {
+          if (unit.type() === UnitType.HydrogenBomb) return 1;
+          if (unit.type() === UnitType.AtomBomb) return 2;
+          if (unit.type() === UnitType.TradePlane) return 3;
+          return 4; // Default for any other type (if applicable)
+        };
+
+        const priorityA = getPriority(a);
+        const priorityB = getPriority(b);
+
+        if (priorityA !== priorityB) {
+          return priorityA - priorityB; // Lower value means higher priority
         }
-        if (
-          a.type() !== UnitType.HydrogenBomb &&
-          b.type() === UnitType.HydrogenBomb
-        ) {
-          return 1;
-        }
+
         // If both are the same type, sort by distance
         return (
           this.mg.manhattanDist(this.post.tile(), a.tile()) -

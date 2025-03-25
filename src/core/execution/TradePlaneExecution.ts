@@ -28,6 +28,7 @@ export class TradePlaneExecution implements Execution {
     private srcPort: Unit,
     private _dstAirport: Unit,
     private pathFinder: PathFinder,
+    private speed: number = 2,
   ) {}
 
   init(mg: Game, ticks: number): void {
@@ -78,27 +79,28 @@ export class TradePlaneExecution implements Execution {
       return;
     }
 
-    console.log(this.tradePlane.tile(), this._dstAirport.tile());
-    const result = this.pathFinder.nextTile(
-      this.tradePlane.tile(),
-      this._dstAirport.tile(),
-    );
+    for (let i = 0; i < this.speed; i++) {
+      const result = this.pathFinder.nextTile(
+        this.tradePlane.tile(),
+        this._dstAirport.tile(),
+      );
 
-    switch (result.type) {
-      case PathFindResultType.Completed:
-        this.complete();
-        break;
-      case PathFindResultType.Pending:
-        // Fire unit event to rerender.
-        this.tradePlane.move(this.tradePlane.tile());
-        break;
-      case PathFindResultType.NextTile:
-        this.tradePlane.move(result.tile);
-        break;
-      case PathFindResultType.PathNotFound:
-        consolex.warn("captured trade plane cannot find route");
-        this.active = false;
-        break;
+      switch (result.type) {
+        case PathFindResultType.Completed:
+          this.complete();
+          break;
+        case PathFindResultType.Pending:
+          // Fire unit event to rerender.
+          this.tradePlane.move(this.tradePlane.tile());
+          break;
+        case PathFindResultType.NextTile:
+          this.tradePlane.move(result.tile);
+          break;
+        case PathFindResultType.PathNotFound:
+          consolex.warn("captured trade plane cannot find route");
+          this.active = false;
+          break;
+      }
     }
   }
 

@@ -4,6 +4,7 @@ import { Layer } from "./Layer";
 import { EventBus } from "../../../core/EventBus";
 
 import anchorIcon from "../../../../resources/images/buildings/port1.png";
+import hangarIcon from "../../../../resources/images/buildings/hangar1.png";
 import missileSiloIcon from "../../../../resources/images/buildings/silo1.png";
 import SAMMissileIcon from "../../../../resources/images/buildings/silo4.png";
 import SAMMissileReloadingIcon from "../../../../resources/images/buildings/silo4-reloading.png";
@@ -37,7 +38,7 @@ export class StructureLayer implements Layer {
       territoryRadius: 6.525,
     },
     [UnitType.Airport]: {
-      icon: anchorIcon,
+      icon: hangarIcon,
       borderRadius: 8.525,
       territoryRadius: 6.525,
     },

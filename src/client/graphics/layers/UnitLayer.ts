@@ -479,56 +479,44 @@ export class UnitLayer implements Layer {
 
   private handleTradePlaneEvent(unit: UnitView) {
     const rel = this.relationship(unit);
+    const centerX = this.game.x(unit.tile());
+    const centerY = this.game.y(unit.tile());
 
-    // Clear previous area
-    for (const t of this.game.bfs(
-      unit.lastTile(),
-      euclDistFN(unit.lastTile(), 5, false),
-    )) {
-      this.clearCell(this.game.x(t), this.game.y(t));
-    }
+    const clearOldArea = () => {
+      const lastX = this.game.x(unit.lastTile());
+      const lastY = this.game.y(unit.lastTile());
+      for (let dx = -8; dx <= 8; dx++) {
+        for (let dy = -8; dy <= 8; dy++) {
+          if ((dx * dx) / (8 * 8) + (dy * dy) / (8 * 8) <= 1) {
+            this.clearCell(lastX + dx, lastY + dy);
+          }
+        }
+      }
+    };
+
+    const paintEllipse = (width: number, height: number, color: Colord) => {
+      for (let dx = -width; dx <= width; dx++) {
+        for (let dy = -height; dy <= height; dy++) {
+          if (
+            (dx * dx) / (width * width) + (dy * dy) / (height * height) <=
+            1
+          ) {
+            this.paintCell(centerX + dx, centerY + dy, rel, color, 255);
+          }
+        }
+      }
+    };
+
+    clearOldArea();
 
     if (unit.isActive()) {
-      // Paint territory with a circular radius
-      for (const t of this.game.bfs(
-        unit.tile(),
-        euclDistFN(unit.tile(), 4, false),
-      )) {
-        this.paintCell(
-          this.game.x(t),
-          this.game.y(t),
-          rel,
-          this.theme.territoryColor(unit.owner().info()),
-          255,
-        );
-      }
+      // Draw horizontal ellipse
+      paintEllipse(7, 3, this.theme.territoryColor(unit.owner().info()));
+      paintEllipse(6, 2, this.theme.borderColor(unit.owner().info()));
 
-      // Paint border with a circular radius
-      for (const t of this.game.bfs(
-        unit.tile(),
-        euclDistFN(unit.tile(), 3, false),
-      )) {
-        this.paintCell(
-          this.game.x(t),
-          this.game.y(t),
-          rel,
-          this.theme.borderColor(unit.owner().info()),
-          255,
-        );
-      }
-
-      for (const t of this.game.bfs(
-        unit.tile(),
-        euclDistFN(unit.tile(), 1, false),
-      )) {
-        this.paintCell(
-          this.game.x(t),
-          this.game.y(t),
-          rel,
-          this.theme.tradeColor(),
-          255,
-        );
-      }
+      // Draw vertical ellipse (swapped width and height)
+      paintEllipse(3, 7, this.theme.territoryColor(unit.owner().info()));
+      paintEllipse(2, 6, this.theme.borderColor(unit.owner().info()));
     }
   }
 
