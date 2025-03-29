@@ -254,7 +254,7 @@ export interface Unit {
   warshipTarget(): Unit;
 
   setCooldown(triggerCooldown: boolean): void;
-  ticksLeftInCooldown(cooldownDuration: number): Tick;
+  ticksLeftInCooldown(): Tick;
   isCooldown(): boolean;
   setDstPort(dstPort: Unit): void;
   dstPort(): Unit; // Only for trade ships

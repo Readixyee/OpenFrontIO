@@ -96,10 +96,7 @@ export class SAMLauncherExecution implements Execution {
         return distA - distB;
       })[0]?.unit ?? null;
 
-    if (
-      this.sam.isCooldown() &&
-      this.sam.ticksLeftInCooldown(this.mg.config().SAMCooldown()) == 0
-    ) {
+    if (this.sam.isCooldown() && this.sam.ticksLeftInCooldown() == 0) {
       this.sam.setCooldown(false);
     }
 

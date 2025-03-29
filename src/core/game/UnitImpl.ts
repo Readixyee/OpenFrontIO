@@ -19,11 +19,10 @@ export class UnitImpl implements Unit {
 
   private _constructionType: UnitType = undefined;
 
-  private _cooldownTick: Tick | null = null;
+  private _cooldownTick: Tick = 0;
   private _dstPort: Unit | null = null; // Only for trade ships
   private _detonationDst: TileRef | null = null; // Only for nukes
   private _warshipTarget: Unit | null = null;
-  private _cooldownDuration: number | null = null;
 
   constructor(
     private _type: UnitType,
@@ -39,7 +38,6 @@ export class UnitImpl implements Unit {
     this._dstPort = unitsSpecificInfos.dstPort;
     this._detonationDst = unitsSpecificInfos.detonationDst;
     this._warshipTarget = unitsSpecificInfos.warshipTarget;
-    this._cooldownDuration = unitsSpecificInfos.cooldownDuration;
   }
 
   id() {
@@ -63,7 +61,7 @@ export class UnitImpl implements Unit {
       dstPortId: dstPort ? dstPort.id() : null,
       warshipTargetId: warshipTarget ? warshipTarget.id() : null,
       detonationDst: this.detonationDst(),
-      ticksLeftInCooldown: this.ticksLeftInCooldown(this._cooldownDuration),
+      ticksLeftInCooldown: this.ticksLeftInCooldown(),
     };
   }
 
@@ -191,20 +189,25 @@ export class UnitImpl implements Unit {
       this._cooldownTick = this.mg.ticks();
       this.mg.addUpdate(this.toUpdate());
     } else {
-      this._cooldownTick = null;
+      this._cooldownTick = 0;
       this.mg.addUpdate(this.toUpdate());
     }
   }
 
-  ticksLeftInCooldown(cooldownDuration: number): Tick {
-    return Math.max(
-      0,
-      cooldownDuration - (this.mg.ticks() - this._cooldownTick),
-    );
+  ticksLeftInCooldown(): Tick {
+    if (!this._cooldownTick) return 0;
+
+    const elapsedTicks = this.mg.ticks() - this._cooldownTick;
+
+    return this.type() == UnitType.SAMLauncher
+      ? Math.max(0, this.mg.config().SAMCooldown() - elapsedTicks)
+      : this.type() == UnitType.MissileSilo
+        ? Math.max(0, this.mg.config().SiloCooldown() - elapsedTicks)
+        : 0;
   }
 
   isCooldown(): boolean {
-    return this._cooldownTick ? true : false;
+    return this._cooldownTick > 0;
   }
 
   setDstPort(dstPort: Unit): void {
